@@ -10,12 +10,23 @@ VERSION_FILE:=VERSION
 COMPOSE_FILE=docker/docker-compose.yml
 TAG:=$(shell cat ${VERSION_FILE})
 
-dev-start: .env ## Primary make command for devs, spins up containers
-	docker-compose -f $(COMPOSE_FILE) --project-name $(PROJECT) up -d --no-recreate --remove-orphans
+start-env: .env ## Primary make command for devs, spins up containers
+	docker-compose -f $(COMPOSE_FILE) --project-name $(PROJECT) up $(ENV) -d --no-recreate
 
-dev-stop: ## Spin down active containers
-	docker-compose -f $(COMPOSE_FILE) --project-name $(PROJECT) down
+stop-env: ## Spin down active containers
+	docker-compose -f $(COMPOSE_FILE) --project-name $(PROJECT) down $(ENV)
 
 # Useful when Dockerfile/requirements are updated)
-dev-rebuild: .env ## Rebuild images for dev containers
+rebuild-env: .env ## Rebuild images for dev containers
+	docker-compose -f $(COMPOSE_FILE) --project-name $(PROJECT) up $(ENV) -d --build
+
+log-env:
+	docker logs $(CONTAINER_NAME)_$(ENV)
+
+###
+stop-all: ## Spin down active containers
+	docker-compose -f $(COMPOSE_FILE) --project-name $(PROJECT) down
+
+rebuild-all: .env ## Rebuild images for dev containers
 	docker-compose -f $(COMPOSE_FILE) --project-name $(PROJECT) up -d --build
+

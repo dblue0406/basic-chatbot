@@ -1,0 +1,16 @@
+version: "3"
+services:
+  dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8050:8050"
+    volumes:
+      - ../:/mnt
+    entrypoint: bash -c "gunicorn --bind 0.0.0.0:8050 index:server"
+    stdin_open: true
+    container_name: "basic_chatbot_${USER}"
+    tty: true
+    env_file:
+      - ../.env

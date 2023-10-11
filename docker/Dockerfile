@@ -3,11 +3,9 @@ LABEL maintainer="Allison Wu <allison.cy.wu@gmail.com>"
 
 RUN apt-get update
 
-COPY requirements.txt /build/requirements.txt
+COPY /docker/requirements.txt /build/requirements.txt
 WORKDIR /build/
 RUN pip install -r /build/requirements.txt
 
-COPY ./ /app
+COPY . /app
 WORKDIR /app
-
-CMD gunicorn --bind 0.0.0.0:80 wsgi

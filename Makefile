@@ -1,7 +1,7 @@
 .PHONY: help, ci-black, ci-flake8, ci-test, isort, black, docs, dev-start, dev-stop
 
 ## Ensure this is the same name as in docker-compose.yml file
-CONTAINER_NAME="basic_chatbot_${USER}"
+CONTAINER_NAME="basic_chatbot"
 
 PROJECT=basic_chatbot
 
@@ -22,6 +22,9 @@ rebuild-env: .env ## Rebuild images for dev containers
 
 log-env:
 	docker logs $(CONTAINER_NAME)_$(ENV)
+
+live-log-env:
+	docker logs --follow $(CONTAINER_NAME)_$(ENV)
 
 ###
 stop-all: ## Spin down active containers
